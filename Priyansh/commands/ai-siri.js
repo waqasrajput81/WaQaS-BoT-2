@@ -22,7 +22,7 @@ const handleEvent = async function ({ api, event, client, __GLOBAL }) {
       api.sendMessage("✨ 𝙷𝚎𝚕𝚕𝚘 𝙸 𝙰𝚖 zain bot kia ap bta sakty hy ap ko mare owner sa kia kam hy agr ap kuch time wait kr sakty hy to fine agr zrori baat krni hy to ma unha inbox ma msg kr ka bula sakta hu thanks ♥️♥️ ", event.threadID);
     } else {
       try {
-        api.sendMessage(`zain BOT 𝙸𝚜 𝚆𝚘𝚛𝚔𝚒𝚗𝚐`, event.threadID);
+        api.sendMessage(`ℤ𝔸𝕀ℕ 𝔹𝕆𝕋 𝙸𝚜 𝚆𝚘𝚛𝚔𝚒𝚗𝚐`, event.threadID);
         const ris = await axios.get(`https://vw6v4g-3000.csb.app/api/tools/bard?question=${message.slice(1).join(" ")}`);
         const resultai = ris.data.edtmsg;
 
