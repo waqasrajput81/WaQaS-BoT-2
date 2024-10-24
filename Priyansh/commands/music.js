@@ -9,7 +9,7 @@ module.exports = {
     version: "1.0.0",
     info: "Get music",
     onPrefix: true,
-    dev: "Jonell Magallanes",
+    dev: "Zain Jutt",
     cooldowns: 10,
 
     onLaunch: async function ({ api, event, target }) {
