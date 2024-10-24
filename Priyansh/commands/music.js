@@ -54,7 +54,8 @@ module.exports = {
                     fs.unlinkSync(filePath);
                     return;
                 }
-const bold = global.fonts.bold("Music Player");
+
+                const bold = global.fonts.bold("Music Player");
                 await api.sendMessage({
                     body: `🎵 ${bold}\n${global.line}\nHere is your music about your search "${song}"\n\nTitle: ${title}\nYoutube Link: ${url}`,
                     attachment: fs.createReadStream(filePath)
@@ -65,13 +66,13 @@ const bold = global.fonts.bold("Music Player");
             });
 
             responseStream.on('error', async (error) => {
-                console.error(error);
-                await api.editMessage(`❌ | ${error.message}`, findingMessage.messageID, event.threadID);
+                console.error("Response stream error: ", error);
+                await api.editMessage(`❌ | Error occurred: ${error.stack || JSON.stringify(error)}`, findingMessage.messageID, event.threadID);
                 fs.unlinkSync(filePath);
             });
         } catch (error) {
-            console.error(error);
-            await api.editMessage(`❌ | ${error.message}`, findingMessage.messageID, event.threadID);
+            console.error("Catch block error: ", error);
+            await api.editMessage(`❌ | Error occurred: ${error.stack || JSON.stringify(error)}`, findingMessage.messageID, event.threadID);
         }
     }
 };
