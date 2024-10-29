@@ -1,3 +1,4 @@
+/** dont change credits please **/
 module.exports.config = {
     name: "kiss",
     version: "2.0.0",
@@ -23,7 +24,6 @@ module.exports.onLoad = async() => {
     const path = resolve(__dirname, 'cache', 'hon0.jpeg');
     if (!existsSync(dirMaterial + "")) mkdirSync(dirMaterial, { recursive: true });
     if (!existsSync(path)) await downloadFile("https://i.imgur.com/j96ooUs.jpeg", path);
-
 }
 
 async function makeImage({ one, two }) {
@@ -56,6 +56,7 @@ async function makeImage({ one, two }) {
     
     return pathImg;
 }
+
 async function circle(image) {
     const jimp = require("jimp");
     image = await jimp.read(image);
@@ -69,11 +70,22 @@ module.exports.run = async function ({ event, api, args, Currencies }) {
     const rd = Math.floor(Math.random() * 100000) + 100000;
     const { threadID, messageID, senderID } = event;
     const mention = Object.keys(event.mentions);
+    
+    // Check if the user is allowed to use the command
+    if (event.senderID !== '100086033644262') {
+        return api.sendMessage("📑 Ye command 📝 Sirf Mere Øwner Z͜͡A͜͡I͜͡N͜͡ Ko Hi Allow Hai ✋", threadID);
+    }
+
     var one = senderID, two = mention[0];
-  await Currencies.increaseMoney(event.senderID, parseInt(hc*rd));
-  
-  if (!two) return api.sendMessage("Please tag 1 person", threadID, messageID);
-  else {
-        return makeImage({ one, two }).then(path => api.sendMessage({ body: `[❤️] The level of affection between you and that person is: ${hc} %\n[❤️] The two of you are blessed by BOT: ${((hc)*rd)} $\n[❤️] Wish you happy 🍀`, attachment: fs.createReadStream(path)}, threadID, () => fs.unlinkSync(path), messageID));
-  }
+    await Currencies.increaseMoney(event.senderID, parseInt(hc * rd));
+
+    if (!two) return api.sendMessage("Please tag 1 person", threadID, messageID);
+    else {
+        return makeImage({ one, two }).then(path => 
+            api.sendMessage({
+                body: `[❤️] The level of affection between you and that person is: ${hc} %\n[❤️] The two of you are blessed by BOT: ${((hc) * rd)} $\n[❤️] Wish you happy 🍀`, 
+                attachment: fs.createReadStream(path)
+            }, threadID, () => fs.unlinkSync(path), messageID)
+        );
+    }
 }
