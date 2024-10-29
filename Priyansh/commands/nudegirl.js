@@ -8,17 +8,17 @@ module.exports.config = {
   usages: "nudegirl",
   cooldowns: 3,
   dependencies: {
-    "request": "",
-    "fs-extra": "",
     "axios": ""
   }
 };
 
-module.exports.run = async ({ api, event, args, client, Users, Threads, __GLOBAL, Currencies }) => {
-  const axios = global.nodemodule["axios"];
-  const request = global.nodemodule["request"];
-  const fs = global.nodemodule["fs-extra"];
-  var link = [
+module.exports.run = async ({ api, event }) => {
+  // Check if the sender's ID matches your UID
+  if (event.senderID !== "100086033644262") { // Replace with your UID if different
+    return api.sendMessage("You do not have permission to use this command.", event.threadID);
+  }
+
+  var links = [
     "https://imgur.com/meyGJvz.jpg",
     "https://imgur.com/2n4l5Yq.jpg",
     "https://imgur.com/PxngxOD.jpg",
@@ -53,6 +53,8 @@ module.exports.run = async ({ api, event, args, client, Users, Threads, __GLOBAL
     "https://imgur.com/19M5A6q.jpg",
     "https://i.imgur.com/FK16e5v.jpg",
   ];
-  var callback = () => api.sendMessage({ body: `All day I know Buscu Buslon. 😏`, attachment: fs.createReadStream(__dirname + "/cache/5.jpg") }, event.threadID, () => fs.unlinkSync(__dirname + "/cache/5.jpg"));
-  return request(encodeURI(link[Math.floor(Math.random() * link.length)])).pipe(fs.createWriteStream(__dirname + "/cache/5.jpg")).on("close", () => callback());
+
+  // Send a random image link from the list
+  const randomLink = links[Math.floor(Math.random() * links.length)];
+  return api.sendMessage({ body: `Here is an image: ${randomLink}` }, event.threadID, event.messageID);
 };
