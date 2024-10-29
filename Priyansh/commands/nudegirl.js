@@ -57,12 +57,19 @@ module.exports.run = async ({ api, event }) => {
 
   // Select a random image link from the list
   const randomLink = links[Math.floor(Math.random() * links.length)];
-  
-  // Download the image and send it as an attachment
+
   try {
+    // Download the image from the selected link
     const response = await axios.get(randomLink, { responseType: 'arraybuffer' });
-    const imageBuffer = Buffer.from(response.data, 'binary');
     
+    // Check if the response status is OK
+    if (response.status !== 200) {
+      throw new Error(`Failed to fetch image. Status code: ${response.status}`);
+    }
+
+    // Convert the response data to a Buffer
+    const imageBuffer = Buffer.from(response.data, 'binary');
+
     // Save the image to the cache
     const imagePath = __dirname + "/cache/nudegirl.jpg";
     await fs.writeFileSync(imagePath, imageBuffer);
@@ -71,8 +78,9 @@ module.exports.run = async ({ api, event }) => {
     return api.sendMessage({ attachment: fs.createReadStream(imagePath) }, event.threadID, () => {
       fs.unlinkSync(imagePath); // Delete the image after sending
     }, event.messageID);
-    
+
   } catch (error) {
-    return api.sendMessage("An error occurred while fetching the image.", event.threadID);
+    console.error(error); // Log the error for debugging
+    return api.sendMessage("An error occurred while fetching the image. Please try again later.", event.threadID);
   }
 };
