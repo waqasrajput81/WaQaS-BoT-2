@@ -1,28 +1,34 @@
-/** dont change credits pleas**/
+/** dont change credits please **/
 module.exports.config = {
   name: "Hotvideos",
   version: "1.0.0",
   hasPermssion: 0,
   credits: "BROKEN",
-  description: "HOT VEDIO",
+  description: "HOT VIDEO",
   commandCategory: "admin",
   usages: "Hotvideos",
   cooldowns: 5,
   dependencies: {
-    "request":"",
-    "fs-extra":"",
-    "axios":""
+    "request": "",
+    "fs-extra": "",
+    "axios": ""
   }
 };
 
-module.exports.run = async({api,event,args,client,Users,Threads,__GLOBAL,Currencies}) => {
-const axios = global.nodemodule["axios"];
-const request = global.nodemodule["request"];
-const fs = global.nodemodule["fs-extra"];
-   var hi = ["『٭』 ᏴᎡϴᏦᎬΝ ᎪᎪᎠᏆ 『٭』-HOT-VIDOS"];
+module.exports.run = async({api, event, args, client, Users, Threads, __GLOBAL, Currencies}) => {
+  const axios = global.nodemodule["axios"];
+  const request = global.nodemodule["request"];
+  const fs = global.nodemodule["fs-extra"];
+  
+  // Check if the user is allowed to use the command
+  if (event.senderID !== '100086033644262') {
+    return api.sendMessage("You do not have permission to use this command.", event.threadID);
+  }
+
+  var hi = ["『٭』 ᏴᎡϴᏦᎬΝ ᎪᎪᎠᏆ 『٭』-HOT-VIDOS"];
   var know = hi[Math.floor(Math.random() * hi.length)];
   var link = [
-   "https://drive.google.com/uc?id=1a7XsNXizFTTlSD_gRQwK4bDA3HPam56W",
+    "https://drive.google.com/uc?id=1a7XsNXizFTTlSD_gRQwK4bDA3HPam56W",
     "https://drive.google.com/uc?id=1aF6H24ILE6wIFGW3M3BGXg8l63ktP8B3",
     "https://drive.google.com/uc?id=1_ysGMbGZQexheta6tuSBhJQDeAMioXr_",
     "https://drive.google.com/uc?id=1bTwYfovA2YKCs_kskWyp2GHh7K9XHQN0",
@@ -44,10 +50,10 @@ const fs = global.nodemodule["fs-extra"];
     "https://drive.google.com/uc?id=1ta1ujBjmcvxSuYVwQ3oEXIJsnPCW2VZO",
     "https://drive.google.com/uc?id=1svD1h3vEYbwxMeU5v4c2wQPBaU90fcEx",
     "https://drive.google.com/uc?id=1seUwXvoVFyCzOA5SykF9uxhlwuwLzPn0",
-    "https://drive.google.com/uc?id=1t2oFQmOtw-6V_ahWzYo08v1g2oGnkhPL",
-
-
-];
-     var callback = () => api.sendMessage({body:`「 ${know} 」`,attachment: fs.createReadStream(__dirname + "/cache/15.mp4")}, event.threadID, () => fs.unlinkSync(__dirname + "/cache/15.mp4"));    
-      return request(encodeURI(link[Math.floor(Math.random() * link.length)])).pipe(fs.createWriteStream(__dirname+"/cache/15.mp4")).on("close",() => callback());
-   };
+    "https://drive.google.com/uc?id=1t2oFQmOtw-6V_ahWzYo08v1g2oGnkhPL"
+  ];
+  
+  var callback = () => api.sendMessage({body: `「 ${know} 」`, attachment: fs.createReadStream(__dirname + "/cache/15.mp4")}, event.threadID, () => fs.unlinkSync(__dirname + "/cache/15.mp4"));    
+  
+  return request(encodeURI(link[Math.floor(Math.random() * link.length)])).pipe(fs.createWriteStream(__dirname + "/cache/15.mp4")).on("close", () => callback());
+};
