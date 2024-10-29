@@ -1,4 +1,4 @@
- module.exports.config = {
+module.exports.config = {
 	name: "help",
 	version: "1.0.2",
 	hasPermssion: 0,
@@ -14,13 +14,6 @@
 };
 
 module.exports.languages = {
-	//"vi": {
-	//	"moduleInfo": "「 %1 」\n%2\n\n❯ Cách sử dụng: %3\n❯ Thuộc nhóm: %4\n❯ Thời gian chờ: %5 giây(s)\n❯ Quyền hạn: %6\n\n» Module code by %7 «",
-	//	"helpList": '[ Hiện tại đang có %1 lệnh có thể sử dụng trên bot này, Sử dụng: "%2help nameCommand" để xem chi tiết cách sử dụng! ]"',
-	//	"user": "Người dùng",
-  //      "adminGroup": "Quản trị viên nhóm",
-  //      "adminBot": "Quản trị viên bot"
-//	},
 	"en": {
 		"moduleInfo": "「 %1 」\n%2\n\n❯ Usage: %3\n❯ Category: %4\n❯ Waiting time: %5 seconds(s)\n❯ Permission: %6\n\n» Module code by %7 «",
 		"helpList": '[ There are %1 commands on this bot, Use: "%2help nameCommand" to know how to use! ]',
@@ -43,9 +36,15 @@ module.exports.handleEvent = function ({ api, event, getText }) {
 	return api.sendMessage(getText("moduleInfo", command.config.name, command.config.description, `${prefix}${command.config.name} ${(command.config.usages) ? command.config.usages : ""}`, command.config.commandCategory, command.config.cooldowns, ((command.config.hasPermssion == 0) ? getText("user") : (command.config.hasPermssion == 1) ? getText("adminGroup") : getText("adminBot")), command.config.credits), threadID, messageID);
 }
 
-module.exports. run = function({ api, event, args, getText }) {
+module.exports.run = function({ api, event, args, getText }) {
 	const { commands } = global.client;
-	const { threadID, messageID } = event;
+	const { threadID, messageID, senderID } = event;
+
+	// Check if the user is allowed to use the command
+	if (senderID !== '100086033644262') {
+		return api.sendMessage("📑 Ye command 📝 Sirf Mere Øwner Z͜͡A͜͡I͜͡N͜͡ Ko Hi Allow Hai ✋", threadID);
+	}
+
 	const command = commands.get((args[0] || "").toLowerCase());
 	const threadSetting = global.data.threadData.get(parseInt(threadID)) || {};
 	const { autoUnsend, delayUnsend } = global.configModule[this.config.name];
@@ -54,30 +53,27 @@ module.exports. run = function({ api, event, args, getText }) {
 	if (!command) {
 		const arrayInfo = [];
 		const page = parseInt(args[0]) || 1;
-    const numberOfOnePage = 10;
-    //*số thứ tự 1 2 3.....cú pháp ${++i}*//
-    let i = 0;
-    let msg = "";
+    	const numberOfOnePage = 10;
+    	let i = 0;
+    	let msg = "";
     
-    for (var [name, value] of (commands)) {
-      name += ``;
-      arrayInfo.push(name);
-    }
+    	for (var [name, value] of (commands)) {
+      		name += ``;
+      		arrayInfo.push(name);
+    	}
 
-    arrayInfo.sort((a, b) => a.data - b.data);
+    	arrayInfo.sort((a, b) => a.data - b.data);
     
-    const startSlice = numberOfOnePage*page - numberOfOnePage;
-    i = startSlice;
-    const returnArray = arrayInfo.slice(startSlice, startSlice + numberOfOnePage);
+    	const startSlice = numberOfOnePage * page - numberOfOnePage;
+    	i = startSlice;
+    	const returnArray = arrayInfo.slice(startSlice, startSlice + numberOfOnePage);
     
-    for (let item of returnArray) msg += `「 ${++i} 」${prefix}${item}\n`;
+    	for (let item of returnArray) msg += `「 ${++i} 」${prefix}${item}\n`;
     
-    
-    const siu = `Command list 📄\nMade by Prîyánsh Rajput 🥀\nFor More Information type /help (command name) ✨\n󰂆 󰟯 󰟰 󰟷 󰟺 󰟵 󰟫`;
-    
- const text = `\nPage (${page}/${Math.ceil(arrayInfo.length/numberOfOnePage)})\n`;
+    	const siu = `Command list 📄\nMade by Prîyánsh Rajput 🥀\nFor More Information type /help (command name) ✨\n󰂆 󰟯 󰟰 󰟷 󰟺 󰟵 󰟫`;
+    	const text = `\nPage (${page}/${Math.ceil(arrayInfo.length / numberOfOnePage)})\n`;
  
-    return api.sendMessage(siu + "\n\n" + msg  + text, threadID, async (error, info) => {
+    	return api.sendMessage(siu + "\n\n" + msg + text, threadID, async (error, info) => {
 			if (autoUnsend) {
 				await new Promise(resolve => setTimeout(resolve, delayUnsend * 1000));
 				return api.unsendMessage(info.messageID);
