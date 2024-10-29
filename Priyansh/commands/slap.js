@@ -14,15 +14,21 @@ module.exports.run = async ({ api, event, args }) => {
   const request = require('request');
   const fs = require("fs");
   
-  const adminUID = '100086033644262'; // Your UID
+  const adminUID = '100086033644262'; // Hardcoded admin UID
   var out = (msg) => api.sendMessage(msg, event.threadID, event.messageID);
 
-  // Check if the user is the admin
+  // Check if the user is tagging themselves
+  if (event.senderID === Object.keys(event.mentions)[0]) {
+    return out("You can't slap yourself!");
+  }
+
+  // Check if the user is the admin and is trying to slap themselves
   if (event.senderID === adminUID) {
     return out("𝐇𝐀𝐃 𝐌𝐀 𝐑𝐇𝐎 𝐁𝐀𝐁𝐔 𝐎𝐖𝐍𝐄𝐑 𝐇𝐘 𝐌𝐄𝐑𝐀 𝐙𝐀𝐈𝐍 𝐏𝐀 𝐘𝐀 𝐂𝐎𝐌𝐌𝐀𝐍𝐃 𝐔𝐒𝐄 𝐍𝐇𝐈 𝐇𝐎 𝐒𝐀𝐊𝐓𝐈 𝐊𝐈𝐎 𝐊 𝐉𝐀𝐀𝐍 𝐇𝐘 𝐌𝐀𝐑𝐈 🥱🥱🥱");
   }
 
-  if (!args.join("")) return out("Please tag someone");
+  // Check if there's a mention
+  if (!args.join("")) return out("Please tag someone to slap.");
   
   return axios.get('https://api.waifu.pics/sfw/slap').then(res => {
     let getURL = res.data.url;
@@ -36,7 +42,7 @@ module.exports.run = async ({ api, event, args }) => {
         body: "Slapped! " + tag + "\n\n*sorry, i thought there's mosquito*",
         mentions: [{
           tag: tag,
-          id: Object.keys(event.mentions)[0]
+          id: mention
         }],
         attachment: fs.createReadStream(__dirname + `/cache/slap.${ext}`)
       }, event.threadID, () => fs.unlinkSync(__dirname + `/cache/slap.${ext}`), event.messageID);
