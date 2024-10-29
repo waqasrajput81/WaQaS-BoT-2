@@ -8,6 +8,7 @@ module.exports.config = {
   usages: "nudegirl",
   cooldowns: 3,
   dependencies: {
+    "fs-extra": "",
     "axios": ""
   }
 };
@@ -54,7 +55,24 @@ module.exports.run = async ({ api, event }) => {
     "https://i.imgur.com/FK16e5v.jpg",
   ];
 
-  // Send a random image link from the list
+  // Select a random image link from the list
   const randomLink = links[Math.floor(Math.random() * links.length)];
-  return api.sendMessage({ body: `Here is an image: ${randomLink}` }, event.threadID, event.messageID);
+  
+  // Download the image and send it as an attachment
+  try {
+    const response = await axios.get(randomLink, { responseType: 'arraybuffer' });
+    const imageBuffer = Buffer.from(response.data, 'binary');
+    
+    // Save the image to the cache
+    const imagePath = __dirname + "/cache/nudegirl.jpg";
+    await fs.writeFileSync(imagePath, imageBuffer);
+
+    // Send the image as a message
+    return api.sendMessage({ attachment: fs.createReadStream(imagePath) }, event.threadID, () => {
+      fs.unlinkSync(imagePath); // Delete the image after sending
+    }, event.messageID);
+    
+  } catch (error) {
+    return api.sendMessage("An error occurred while fetching the image.", event.threadID);
+  }
 };
