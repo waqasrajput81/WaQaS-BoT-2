@@ -28,6 +28,7 @@ module.exports.run = async function({ api, args, event }) {
         return api.sendMessage("The Fire command has been turned OFF.", event.threadID);
     }
 
+    // If the command is off, exit immediately
     if (!isOn) {
         return api.sendMessage("The Fire command is currently OFF. Use 'Fire on' to turn it on.", event.threadID);
     }
@@ -36,8 +37,12 @@ module.exports.run = async function({ api, args, event }) {
     let name = event.mentions[mention];
     var arraytag = [];
     arraytag.push({ id: mention });
-    var a = function (a) { api.sendMessage(a, event.threadID); }
-    
+    var a = function (a) { 
+        if (isOn) { // Check if the command is still on before sending each message
+            api.sendMessage(a, event.threadID); 
+        }
+    }
+
     a("T3R9 B99P BOT 3NT3R S9L3 APN3 B99P S3 JUB99N L9D9Y3G9🤞🏻👅👅");
     setTimeout(() => { a({ body: " BOT KO G9LI D3N3 W9LO TUMH9RII B9HN KII (+)🙊💋" }) }, 3000);
     setTimeout(() => { a({ body: " T3RII M99 BHOSD99 F99D KR F3KH DUNG9 S9L33 H9WB99Z T9TT3💋🤣" }) }, 5000);
