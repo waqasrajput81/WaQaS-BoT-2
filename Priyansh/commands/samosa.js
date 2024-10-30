@@ -1,5 +1,5 @@
 module.exports.config = {
-  name: "samosa", // Command name changed to "samosa"
+  name: "samosa",
   version: "1.0.0",
   hasPermssion: 0,
   credits: "𝐏𝐫𝐢𝐲𝐚𝐧𝐬𝐡 𝐑𝐚𝐣𝐩𝐮𝐭",
@@ -36,7 +36,7 @@ module.exports.run = async ({ api, event, Currencies }) => {
     Currencies.setData(event.senderID, { money: money - 200 });
     
     // Send a message before the image
-    api.sendMessage("𝗔𝗖𝗛𝗔 𝗚 𝗟𝗚𝗧𝗔 𝗕𝗛𝗢𝗢𝗞 𝗟𝗚 𝗚𝗔𝗘𝗬 𝗛𝗬 𝗝𝗡𝗔𝗕 𝗞𝗢 𝗗𝗘𝗧𝗔 𝗛𝗨 𝗦𝗔𝗠𝗢𝗦𝗔", event.threadID, async () => {
+    api.sendMessage("𝗔𝗖𝗛𝗔 𝗚 𝗟𝗚𝗧𝗔 𝗕𝗛𝗢𝗢𝗞 𝗟𝗚 𝗚𝗔𝗘𝗬 𝗛𝗬 𝗝𝗡𝗔𝗕 𝗞𝗢 𝗗𝗘𝗧𝗔 𝗛𝗨 𝗦𝗔𝗠𝗢𝗦𝗔", event.threadID, async (err, info) => {
       // Add reaction to the user's message
       await api.setMessageReaction("😋", event.messageID, true);
       
