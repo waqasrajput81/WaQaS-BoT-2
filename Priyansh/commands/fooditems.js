@@ -32,20 +32,25 @@ module.exports.run = async ({ api, event, args }) => {
             headers: { 'Ocp-Apim-Subscription-Key': apiKey }
         });
 
-        // Extract the first image URL
-        const imageUrl = response.data.value[0].contentUrl;
-        const ext = imageUrl.split('.').pop().split('?')[0];
+        // Check if there are results
+        if (response.data.value && response.data.value.length > 0) {
+            const imageUrl = response.data.value[0].contentUrl;
+            const ext = imageUrl.split('.').pop().split('?')[0];
 
-        // Send the image to the chat
-        let callback = function () {
-            api.sendMessage({
-                attachment: fs.createReadStream(__dirname + `/cache/food.${ext}`)
-            }, event.threadID, () => fs.unlinkSync(__dirname + `/cache/food.${ext}`), event.messageID);
-        };
+            // Send the image to the chat
+            let callback = function () {
+                api.sendMessage({
+                    attachment: fs.createReadStream(__dirname + `/cache/food.${ext}`)
+                }, event.threadID, () => fs.unlinkSync(__dirname + `/cache/food.${ext}`), event.messageID);
+            };
 
-        request(imageUrl).pipe(fs.createWriteStream(__dirname + `/cache/food.${ext}`)).on("close", callback);
+            request(imageUrl).pipe(fs.createWriteStream(__dirname + `/cache/food.${ext}`)).on("close", callback);
+        } else {
+            // No image results found for the search term
+            api.sendMessage("Sorry, I couldn't find any images for that food item. Please try a different name.", event.threadID, event.messageID);
+        }
     } catch (error) {
-        console.error(error);
-        api.sendMessage("Sorry, I couldn't find an image for that food item. Try something else!", event.threadID, event.messageID);
+        console.error("Error fetching image:", error);
+        api.sendMessage("There was an error retrieving the image. Please try again later.", event.threadID, event.messageID);
     }
 };
