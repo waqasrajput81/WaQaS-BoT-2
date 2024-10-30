@@ -11,7 +11,6 @@ module.exports.config = {
 
 module.exports.run = async ({ api, event, args }) => {
     const axios = require('axios');
-    const request = require('request');
     const fs = require("fs");
 
     // Check if user provided a food name
@@ -19,45 +18,32 @@ module.exports.run = async ({ api, event, args }) => {
         return api.sendMessage("Please provide a food name to get an image!", event.threadID, event.messageID);
     }
 
-    // Get the food name from the user input
+    // Get the food name from user input
     const foodName = args.join(" ");
     
-    // Bing Image Search API key and endpoint
-    const apiKey = 'YOUR_BING_API_KEY'; // Replace with your Bing API key
-    const endpoint = `https://api.bing.microsoft.com/v7.0/images/search?q=${encodeURIComponent(foodName)}&count=1`;
+    // Google Custom Search API key and Search Engine ID
+    const apiKey = 'YOUR_GOOGLE_API_KEY'; // Replace with your Google API key
+    const searchEngineId = 'YOUR_SEARCH_ENGINE_ID'; // Replace with your Search Engine ID
+    const endpoint = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(foodName)}&cx=${searchEngineId}&searchType=image&key=${apiKey}`;
 
     try {
-        // Fetch image from Bing Image Search API
-        const response = await axios.get(endpoint, {
-            headers: { 'Ocp-Apim-Subscription-Key': apiKey }
-        });
+        // Fetch image from Google Custom Search API
+        const response = await axios.get(endpoint);
 
         // Check if there are results
-        if (response.data.value && response.data.value.length > 0) {
-            const imageUrl = response.data.value[0].contentUrl;
-            const ext = imageUrl.split('.').pop().split('?')[0];
+        if (response.data.items && response.data.items.length > 0) {
+            const imageUrl = response.data.items[0].link; // Get the first image link
 
             // Send the image to the chat
-            let callback = function () {
-                api.sendMessage({
-                    attachment: fs.createReadStream(__dirname + `/cache/food.${ext}`)
-                }, event.threadID, () => fs.unlinkSync(__dirname + `/cache/food.${ext}`), event.messageID);
-            };
-
-            request(imageUrl).pipe(fs.createWriteStream(__dirname + `/cache/food.${ext}`)).on("close", callback);
+            api.sendMessage({
+                body: `Here's an image of ${foodName}:`,
+                attachment: await axios.get(imageUrl, { responseType: 'arraybuffer' }).then(res => {
+                    return Buffer.from(res.data, 'binary');
+                })
+            }, event.threadID, event.messageID);
         } else {
-            // No results found, fallback to a default image
-            api.sendMessage("Sorry, couldn't find an exact image for that item. Here's a general food image.", event.threadID, event.messageID);
-
-            // Path to a local default food image (add this image in the project)
-            const defaultImagePath = __dirname + '/cache/default_food.jpg';
-            if (fs.existsSync(defaultImagePath)) {
-                api.sendMessage({
-                    attachment: fs.createReadStream(defaultImagePath)
-                }, event.threadID, event.messageID);
-            } else {
-                api.sendMessage("Default image not found. Please try again later.", event.threadID, event.messageID);
-            }
+            // No results found
+            api.sendMessage(`Sorry, I couldn't find an image for that food item. Please try a different name.`, event.threadID, event.messageID);
         }
     } catch (error) {
         console.error("Error fetching image:", error.message);
