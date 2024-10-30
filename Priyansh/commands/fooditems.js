@@ -46,11 +46,21 @@ module.exports.run = async ({ api, event, args }) => {
 
             request(imageUrl).pipe(fs.createWriteStream(__dirname + `/cache/food.${ext}`)).on("close", callback);
         } else {
-            // No image results found for the search term
-            api.sendMessage("Sorry, I couldn't find any images for that food item. Please try a different name.", event.threadID, event.messageID);
+            // No results found, fallback to a default image
+            api.sendMessage("Sorry, couldn't find an exact image for that item. Here's a general food image.", event.threadID, event.messageID);
+
+            // Path to a local default food image (add this image in the project)
+            const defaultImagePath = __dirname + '/cache/default_food.jpg';
+            if (fs.existsSync(defaultImagePath)) {
+                api.sendMessage({
+                    attachment: fs.createReadStream(defaultImagePath)
+                }, event.threadID, event.messageID);
+            } else {
+                api.sendMessage("Default image not found. Please try again later.", event.threadID, event.messageID);
+            }
         }
     } catch (error) {
-        console.error("Error fetching image:", error);
-        api.sendMessage("There was an error retrieving the image. Please try again later.", event.threadID, event.messageID);
+        console.error("Error fetching image:", error.message);
+        api.sendMessage("There was an error retrieving the image. Please check back later.", event.threadID, event.messageID);
     }
 };
