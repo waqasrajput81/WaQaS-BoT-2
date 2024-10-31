@@ -1,11 +1,11 @@
 module.exports.config = {
-  name: "sexxy",
+  name: "notworking",
   version: "1.0.0",
   hasPermssion: 2,
   credits: "ARIF BABU",
   description: "Random sexy photos for a fee",
   commandCategory: "Image",
-  usages: "sexy",
+  usages: "not working",
   cooldowns: 3
 };
 
@@ -32,7 +32,5 @@ module.exports.run = async ({ api, event, Currencies }) => {
       };
       request(res.data.data).pipe(fs.createWriteStream(__dirname + '/cache/trai.jpg')).on("close", callback).then(Currencies.setData(event.senderID, { money: money - 1000 }));
     });
-  } else {
-    return api.sendMessage("Are you addicted to sex, you cunt?", event.threadID, event.messageID);
   }
 }
