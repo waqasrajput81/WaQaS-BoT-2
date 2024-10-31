@@ -1,9 +1,9 @@
 module.exports.config = {
   name: "name",
-  version: "1.0.1",
+  version: "1.0.2",
   hasPermssion: 0,
   credits: "𝐏𝐫𝐢𝐲𝐚𝐧𝐬𝐡 𝐑𝐚𝐣𝐩𝐮𝐭",
-  description: "Add a name to a custom background image",
+  description: "Add a name to a default background image",
   commandCategory: "dpname",
   usages: "name <text>",
   cooldowns: 1
@@ -35,25 +35,27 @@ module.exports.run = async function ({ api, event, args }) {
   const axios = global.nodemodule["axios"];
   const fs = global.nodemodule["fs-extra"];
   
-  if (!event.attachments || event.attachments.length === 0 || event.attachments[0].type !== "photo") {
-    return api.sendMessage("Please attach an image along with your command.", threadID, messageID);
+  const nameText = args.join(" ").trim();
+  if (!nameText) {
+    return api.sendMessage("Please enter a name after the command, e.g., 'name John Doe'.", threadID, messageID);
   }
 
-  const pathImg = __dirname + `/cache/userImage_${senderID}.png`;
-  const nameText = args.join(" ").trim();
+  const pathImg = __dirname + `/cache/defaultImage.png`;
   
-  // Download the user-uploaded image
-  const userImageUrl = event.attachments[0].url;
-  const getImage = (await axios.get(userImageUrl, { responseType: "arraybuffer" })).data;
-  fs.writeFileSync(pathImg, Buffer.from(getImage, "utf-8"));
-  
+  // Download the default background image if not already in cache
+  if (!fs.existsSync(pathImg)) {
+    const defaultImageUrl = "https://i.imgur.com/Vu0AYmH.jpg"; // Replace with your desired default image URL
+    const getImage = (await axios.get(defaultImageUrl, { responseType: "arraybuffer" })).data;
+    fs.writeFileSync(pathImg, Buffer.from(getImage, "utf-8"));
+  }
+
   // Download font if not already in cache
   if (!fs.existsSync(__dirname + '/cache/SNAZZYSURGE.ttf')) {
     const getFont = (await axios.get(`https://drive.google.com/u/0/uc?id=11YxymRp0y3Jle5cFBmLzwU89XNqHIZux&export=download`, { responseType: "arraybuffer" })).data;
     fs.writeFileSync(__dirname + "/cache/SNAZZYSURGE.ttf", Buffer.from(getFont, "utf-8"));
   }
 
-  // Load the image and draw the text
+  // Load the default image as the background
   const baseImage = await loadImage(pathImg);
   const canvas = createCanvas(baseImage.width, baseImage.height);
   const ctx = canvas.getContext("2d");
