@@ -24,6 +24,23 @@ app.get("/webhook", (req, res) => {
     }
 });
 
+// Command metadata
+const commands = [
+    {
+        credits: "𝐏𝐫𝐢𝐲𝐚𝐧𝐬𝐡 𝐑𝐚𝐣𝐩𝐮𝐭",
+        description: "Random joke image",
+        commandCategory: "Image",
+        usages: "burger", // Trigger word for this command
+        execute: async (sender_psid) => {
+            const randomJokeImageUrl = "https://example.com/random-joke.jpg"; // Replace with a valid image URL
+            await sendMessage(sender_psid, { text: "Here's a random joke for you:" });
+            await sendMessage(sender_psid, {
+                attachment: { type: "image", payload: { url: randomJokeImageUrl } },
+            });
+        },
+    },
+];
+
 // Handle incoming messages
 app.post("/webhook", async (req, res) => {
     const body = req.body;
@@ -34,23 +51,14 @@ app.post("/webhook", async (req, res) => {
             const sender_psid = webhook_event.sender.id;
 
             if (webhook_event.message && webhook_event.message.text) {
-                const message = webhook_event.message.text;
+                const message = webhook_event.message.text.trim().toLowerCase();
 
-                if (isVideoLink(message)) {
-                    // Notify user about the download process
-                    sendMessage(sender_psid, { text: "⏳ Wait please, your video is being downloaded..." });
-
-                    const videoUrl = await downloadVideo(message);
-                    if (videoUrl) {
-                        sendMessage(sender_psid, { text: "✅ Here is your video:" });
-                        sendMessage(sender_psid, {
-                            attachment: { type: "video", payload: { url: videoUrl } },
-                        });
-                    } else {
-                        sendMessage(sender_psid, { text: "❌ Sorry, I couldn't download the video." });
-                    }
+                // Match the user's message with a command
+                const command = commands.find((cmd) => message === cmd.usages);
+                if (command) {
+                    await command.execute(sender_psid);
                 } else {
-                    sendMessage(sender_psid, { text: "⚠️ Please send a valid video link." });
+                    await sendMessage(sender_psid, { text: "⚠️ Command not recognized. Try 'burger'!" });
                 }
             }
         });
@@ -61,39 +69,23 @@ app.post("/webhook", async (req, res) => {
     }
 });
 
-// Check if a message contains a video link
-const isVideoLink = (url) => {
-    const videoPlatforms = ["tiktok.com", "youtube.com", "youtu.be", "instagram.com", "facebook.com"];
-    return videoPlatforms.some((platform) => url.includes(platform));
-};
-
-// Download the video using a third-party API
-const downloadVideo = async (url) => {
-    try {
-        const apiEndpoint = `https://some-video-downloader-api.com/download`; // Replace with an actual API
-        const response = await axios.post(apiEndpoint, { url });
-        return response.data.videoUrl; // Adjust based on API response
-    } catch (error) {
-        console.error("Error downloading video:", error);
-        return null;
-    }
-};
-
-// Send a message back to the user
-const sendMessage = (sender_psid, response) => {
+// Function to send messages to the user
+const sendMessage = async (sender_psid, response) => {
     const request_body = {
         recipient: { id: sender_psid },
         message: response,
     };
 
-    axios.post(
-        `https://graph.facebook.com/v15.0/me/messages?access_token=${PAGE_ACCESS_TOKEN}`,
-        request_body
-    )
-        .then(() => console.log("Message sent!"))
-        .catch((error) => console.error("Error sending message:", error));
+    try {
+        await axios.post(
+            `https://graph.facebook.com/v15.0/me/messages?access_token=${PAGE_ACCESS_TOKEN}`,
+            request_body
+        );
+        console.log("Message sent!");
+    } catch (error) {
+        console.error("Error sending message:", error.response?.data || error.message);
+    }
 };
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
-``
