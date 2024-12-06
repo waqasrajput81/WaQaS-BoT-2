@@ -27,23 +27,22 @@ app.get("/webhook", (req, res) => {
 // Command list with attributes
 const commands = [
     {
-        name: "owner",
-        description: "Sends a message mentioning the bot's owner.",
-        usage: "Type 'owner' to see this message.",
-        execute: (sender_psid) => {
-            sendMessage(sender_psid, {
-                text: "★꧁💗𝕄𝕐 ℍ𝔸ℕ𝔻𝕊𝕆𝕄𝔼 𝕆𝕎ℕ𝔼ℝ🥰꧂\n𝗠𝗮𝗱𝗲 𝗕𝘆 🫶 Zain Jutt!",
-            });
-        },
-    },
-    {
         name: "video",
         description: "Handles video download links.",
         usage: "Send a valid video link (e.g., TikTok, YouTube, Instagram) to download.",
-        execute: async (sender_psid, message) => {
+        execute: async (sender_psid, message, message_id) => {
             if (isVideoLink(message)) {
+                // React with ⏳ for download in progress
+                reactToMessage(message_id, "⏳");
+
+                sendMessage(sender_psid, { text: "Wait please, the video is downloading..." });
+
                 const videoUrl = await downloadVideo(message);
+
                 if (videoUrl) {
+                    // React with ✅ for successful download
+                    reactToMessage(message_id, "✅");
+
                     sendMessage(sender_psid, { text: "Here is your video:" });
                     sendMessage(sender_psid, { attachment: { type: "video", payload: { url: videoUrl } } });
                 } else {
@@ -78,12 +77,13 @@ app.post("/webhook", async (req, res) => {
             const sender_psid = webhook_event.sender.id;
 
             if (webhook_event.message && webhook_event.message.text) {
-                const message = webhook_event.message.toLowerCase();
+                const message = webhook_event.message.text.toLowerCase();
+                const message_id = webhook_event.message.mid;
 
                 // Match and execute the appropriate command
-                const command = commands.find((cmd) => message.includes(cmd.name));
+                const command = commands.find((cmd) => message.includes(cmd.name) || isVideoLink(message));
                 if (command) {
-                    command.execute(sender_psid, message);
+                    command.execute(sender_psid, message, message_id);
                 } else {
                     sendMessage(sender_psid, { text: "Command not recognized. Type 'help' for a list of commands." });
                 }
@@ -124,6 +124,18 @@ const sendMessage = (sender_psid, response) => {
     )
         .then(() => console.log("Message sent!"))
         .catch((error) => console.error("Error sending message:", error));
+};
+
+const reactToMessage = (message_id, reaction) => {
+    axios.post(
+        `https://graph.facebook.com/v15.0/me/messages?access_token=${PAGE_ACCESS_TOKEN}`,
+        {
+            recipient: { id: message_id },
+            sender_action: reaction === "✅" ? "mark_seen" : null, // Replace with appropriate reaction if supported
+        }
+    )
+        .then(() => console.log("Reaction sent!"))
+        .catch((error) => console.error("Error sending reaction:", error));
 };
 
 const PORT = process.env.PORT || 3000;
