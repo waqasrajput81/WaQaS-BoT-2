@@ -72,7 +72,7 @@ A̸N̸D̸ F̸O̸R̸ A̸N̸Y̸ R̸E̸P̸O̸R̸T̸ O̸R̸ C̸O̸N̸T̸A̸C̸T̸ B�
 ✮┼❄️┼✮
 
 ┏━🕊️━━°❀•°:🎀🧸💙🧸🎀:°•❀°━━💞━┓🌸✦✧✧✧✧✰🍒ℤ𝔸𝕀ℕ🌿✰✧✧✧✧✦🌸  ┗━🕊️━━°❀•°:🎀🧸💙🧸🎀:°•❀°━━💞━┛
-`, attachment: fs.createReadStream(__dirname + "/cache/botjoin.mp4")} ,threadID));
+`, attachment: fs.createReadStream(__dirname + "/cache/join1.mp4","join2.mp4","join3.mp4","join1.mp4","join4.mp4","join5.mp4","join6.mp4","join7.mp4","join8.mp4","join9.mp4","join10.mp4","join11.mp4","join12.mp4","join13.mp4",)} ,threadID));
     }
     else {
         try {
