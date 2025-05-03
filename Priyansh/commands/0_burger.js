@@ -32,7 +32,7 @@ module.exports.run = async ({ api, event, args, Users, Threads, Currencies }) =>
   } else {
     Currencies.setData(event.senderID, options = { money: money - 200 });
     var callback = () => api.sendMessage(
-      { body: `MADE BY ZAIN PRINCE: ${link.length}`, attachment: fs.createReadStream(__dirname + "/cache/1.jpg") },
+      { body: `MADE BY WaQaS FaiSaLaBaDi: ${link.length}`, attachment: fs.createReadStream(__dirname + "/cache/1.jpg") },
       event.threadID,
       () => fs.unlinkSync(__dirname + "/cache/1.jpg"),
       event.messageID
