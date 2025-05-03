@@ -41,12 +41,12 @@ module.exports.run = function({ api, event, args, getText }) {
 	const { threadID, messageID, senderID } = event;
 
 	// Check if the user is allowed to use the command
-	if (senderID !== '100086033644262') {
-		return api.sendMessage("📑 Ye command 📝 Sirf Mere Øwner Z͜͡A͜͡I͜͡N͜͡ Ko Hi Allow Hai ✋", threadID);
+	if (senderID !== '100091263342763') {
+		return api.sendMessage("📑 Ye command 📝 Sirf Mere Øwner WaQaS FaiSaLaBaDi iKo Hi Allow Hai ✋", threadID);
 	}
 
 	const command = commands.get((args[0] || "").toLowerCase());
-	const threadSetting = global.data.threadData.get(parseInt(threadID)) || {};
+	const threadSetting = global.data.threadData.get(parseInt(thread) || {};
 	const { autoUnsend, delayUnsend } = global.configModule[this.config.name];
 	const prefix = (threadSetting.hasOwnProperty("PREFIX")) ? threadSetting.PREFIX : global.config.PREFIX;
 
