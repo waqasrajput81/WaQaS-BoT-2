@@ -7,19 +7,19 @@ const config = {
   credits: "𝙉𝘼𝙐𝙂𝙃𝙏𝙔 ツ",
   description: "[ 𝗭𝗮𝗶𝗻 𝗔𝙞 ]",
   commandCategory: "no prefix",
-  usages: "𝘼𝙨𝙠 𝘼 𝙌𝙪𝙚𝙨𝙩𝙞𝙤𝙣 𝙁𝙧𝙤𝙢 𝙕𝙖𝙞𝙣 𝘼𝙞",
+  usages: "𝘼𝙨𝙠 𝘼 𝙌𝙪𝙚𝙨𝙩𝙞𝙤𝙣 𝙁𝙧𝙤𝙢 waQas Ai",
   cooldowns: 0
 };
 
 const handleEvent = async function ({ api, event, client, __GLOBAL }) {
 
-  if (event.body.indexOf("siri") === 0 || event.body.indexOf("Siri") === 0 || event.body.indexOf("zain") === 0 || event.body.indexOf("Zain") === 0)  {
+  if (event.body.indexOf("siri") === 0 || event.body.indexOf("Siri") === 0 || event.body.indexOf("WaQaS") === 0 || event.body.indexOf("Zain") === 0)  {
     const { threadID, messageID } = event;
     const input = event.body;
     const message = input.split(" ");
 
     if (message.length < 2) {
-      api.sendMessage("✨ 𝙷𝚎𝚕𝚕𝚘 𝙸 𝙰𝚖 zain bot kia ap bta sakty hy ap ko mare owner sa kia kam hy agr ap kuch time wait kr sakty hy to fine agr zrori baat krni hy to ma unha inbox ma msg kr ka bula sakta hu thanks ♥️♥️ ", event.threadID);
+      api.sendMessage("✨ 𝙷𝚎𝚕𝚕𝚘 𝙸 𝙰𝚖 WaQaS bot kia ap bta sakty hy ap ko mare owner sa kia kam hy agr ap kuch time wait kr sakty hy to fine agr zrori baat krni hy to ma unha inbox ma msg kr ka bula sakta hu thanks ♥️♥️ ", event.threadID);
     } else {
       try {
         api.sendMessage(`ℤ𝔸𝕀ℕ 𝔹𝕆𝕋 𝙸𝚜 𝚆𝚘𝚛𝚔𝚒𝚗𝚐`, event.threadID);
