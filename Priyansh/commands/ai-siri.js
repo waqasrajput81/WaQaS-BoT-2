@@ -5,7 +5,7 @@ const config = {
   version: "1.0.0",
   hasPermission: 0,
   credits: "𝙉𝘼𝙐𝙂𝙃𝙏𝙔 ツ",
-  description: "[ 𝗭𝗮𝗶𝗻 𝗔𝙞 ]",
+  description: "[ Waqas Ai ]",
   commandCategory: "no prefix",
   usages: "𝘼𝙨𝙠 𝘼 𝙌𝙪𝙚𝙨𝙩𝙞𝙤𝙣 𝙁𝙧𝙤𝙢 waQas Ai",
   cooldowns: 0
@@ -22,7 +22,7 @@ const handleEvent = async function ({ api, event, client, __GLOBAL }) {
       api.sendMessage("✨ 𝙷𝚎𝚕𝚕𝚘 𝙸 𝙰𝚖 WaQaS bot kia ap bta sakty hy ap ko mare owner sa kia kam hy agr ap kuch time wait kr sakty hy to fine agr zrori baat krni hy to ma unha inbox ma msg kr ka bula sakta hu thanks ♥️♥️ ", event.threadID);
     } else {
       try {
-        api.sendMessage(`ℤ𝔸𝕀ℕ 𝔹𝕆𝕋 𝙸𝚜 𝚆𝚘𝚛𝚔𝚒𝚗𝚐`, event.threadID);
+        api.sendMessage(`WaQaS BoT 𝙸𝚜 𝚆𝚘𝚛𝚔𝚒𝚗𝚐`, event.threadID);
         const ris = await axios.get(`https://vw6v4g-3000.csb.app/api/tools/bard?question=${message.slice(1).join(" ")}`);
         const resultai = ris.data.edtmsg;
 
