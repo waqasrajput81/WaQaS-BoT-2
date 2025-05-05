@@ -13,7 +13,7 @@ const config = {
 
 const handleEvent = async function ({ api, event, client, __GLOBAL }) {
 
-  if (event.body.indexOf("siri") === 0 || event.body.indexOf("Siri") === 0 || event.body.indexOf("WaQaS") === 0 || event.body.indexOf("Zain") === 0)  {
+  if (event.body.indexOf("siri") === 0 || event.body.indexOf("Siri") === 0 || event.body.indexOf("WaQaS") === 0 || event.body.indexOf("WaQaS") === 0)  {
     const { threadID, messageID } = event;
     const input = event.body;
     const message = input.split(" ");
