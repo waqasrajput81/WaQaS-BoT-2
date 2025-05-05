@@ -3,7 +3,7 @@ module.exports.config = {
   name: "poet",
   version: "1.0.1",
   hasPermssion: 0,
-  credits: "Fixed By ZAIN IFTIKHAR",
+  credits: "Fixed By WAQAS FAISALABADI",
   description: "Generates a random Urdu poetry line",
   commandCategory: "Noprefix",
   usages: "poet",
