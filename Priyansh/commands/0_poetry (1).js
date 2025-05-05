@@ -74,7 +74,7 @@ module.exports.handleEvent = async function({ api, event, Users }) {
     const message = {
       body: `꧁🍒❤️‍🔥${name}❤️‍🔥🍒꧂,                 𒅒𒈔𒅒𒈔𒅒𒇫𒄆𒇫𒄆𒇫𒄆𒂝𒀱𒂝𒀱𒈔𒅒𒈔𒅒𒇫𒄆𒇫𒄆𒀱𒂝𒀱𒂝𒈔𒅒
 
-      『꧁🍒\n   ${selectedLine} 🍒꧂』\n\n❤️𝕆𝕎ℕ𝔼ℝ : ꧁𝐙𝐚𝐢𝐧𝐢-𝐉𝐮𝐭𝐭꧂🌹`
+      『꧁🍒\n   ${selectedLine} 🍒꧂』\n\n❤️𝕆𝕎ℕ𝔼ℝ : ꧁WaQaS-FaiSaLaBaDi꧂🌹`
     };
 
     // Send the message to the thread
