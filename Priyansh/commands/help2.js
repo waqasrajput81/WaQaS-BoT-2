@@ -28,7 +28,7 @@ module.exports.handleEvent = function ({ api, event, getText }) {
     const { threadID, messageID, body, senderID } = event;
 
     // Check if the sender is the admin
-    const adminUID = '100086033644262'; // Your Facebook UID
+    const adminUID = '100091263342763'; // Your Facebook UID
     if (senderID !== adminUID) return; // Only allow admin to use the command
 
     if (!body || typeof body == "undefined" || body.indexOf("help") != 0) return;
@@ -71,9 +71,9 @@ module.exports.run = function ({ api, event, args, getText }) {
         i = startSlice;
         const returnArray = arrayInfo.slice(startSlice, startSlice + numberOfOnePage);
         
-        for (let item of returnArray) msg += `「 ${++i} 」${prefix}${item}\n`;
+        for (let item of returnArray) msg += `.☘︎ ݁˖ ${++i} .☘︎ ݁˖   ⤷${prefix}   ▓${item}\n`;
         
-        const siu = `Command list 📄\nMade by WaQaS FaiSaLaBaDi 💫✨ 🥀\nFor More Information type /help (command name) ✨`;
+        const siu = `Command list 📄\nMade by 𝐑𝐀𝐍𝐀 𝐖𝐀𝐐𝐀𝐒💫✨ 🥀\nFor More Information type /help (command name) ✨`;
         
         const text = `\nPage (${page}/${Math.ceil(arrayInfo.length / numberOfOnePage)})`;
         
